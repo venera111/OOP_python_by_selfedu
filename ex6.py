@@ -30,4 +30,4 @@ pt.set_coord(10, 5)
 # print(pt.__x, pt.__y)
 print(pt.get_coord())
 # print(dir(pt))
-print(pt._Point__x, pt._Point__y) # не рекомендуется так делать
+# print(pt._Point__x, pt._Point__y) # не рекомендуется так делать
