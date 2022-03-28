@@ -12,7 +12,7 @@ class Person:
 		# в инициализаторе воспользоваться объектами-свойствами
 		self.__fio = fio.split()
 		self.old = old
-		self.password = ps
+		self.passport = ps
 		self.weight = weight
 
 	@classmethod
@@ -77,7 +77,7 @@ class Person:
 
 	@property
 	def weight(self):
-		return self.__passport
+		return self.__weight
 
 	@weight.setter
 	def weight(self, w):
