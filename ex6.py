@@ -1,33 +1,36 @@
-# механизм инкапсуляции public, private, protected. Сеттеры и геттеры
+"""6. Режимы доступа public, private, protected. Сеттеры и геттеры"""
 
-from traceback import print_tb
+# @private из библиотеки позволяет запретить вызов функции вне класса
+# вместо декоратора можно использовать __check_value(cls, x) нижнее подчеркивание
+# одиночное подчеркивание позволяет обратиться извне, но так не рекомендуется
+# к приватному методу можно обратиться черз название класса _Point__check_value()
+# но так тоже не рекомендуется делать
 
+from accessify import private, protected
 
 class Point:
-	def __init__(self, x=0, y=0) -> None:
+	def __init__(self, x=0, y=0):
 		self.__x = self.__y = 0
-		if self.__check_value(x) and self.__check_value(y):
-			self.__x = x # защищенный локальный атрибут
+		if self.check_value(x) and self.check_value(y):
+			self.__x = x
 			self.__y = y
 
-	@classmethod
-	def __check_value(cls, x):
+	@private #защита от доступа извне
+	@classmethod # будет вызываться для проверки и мб использовать атрибуты класса в будущем
+	def check_value(cls, x):
 		return type(x) in (int, float)
 
-	def set_coord(self, x, y):
-		if self.__check_value(x) and self.__check_value(y):
+	def set_coords(self, x, y):
+		if self.check_value(x) and self.check_value(y):
 			self.__x = x
 			self.__y = y
 		else:
-			raise ValueError("координаты должны быть числами")
+			raise ValueError('координаты должны быть числами')
 
-	def get_coord(self):
+	def get_coords(self):
 		return self.__x, self.__y
 
-
 pt = Point(1, 2)
-pt.set_coord(10, 5)
-# print(pt.__x, pt.__y)
-print(pt.get_coord())
-# print(dir(pt))
-# print(pt._Point__x, pt._Point__y) # не рекомендуется так делать
+pt.set_coords(10, 20)
+print(pt.get_coords())
+print(dir(pt))

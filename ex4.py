@@ -1,35 +1,61 @@
-# __new__ и паттерн Singleton
+""" 4. Магический метод __new__. Пример паттерна Singleton """
 
+# вызывется перед созданием объекта класса
+# cls ссылается на текущий класс Point
+# self ссылается на экземпляр класса Point
+# __new__ должен возвращать адрес нового созданного объекта
+# super() - ссылка на базовый класс object
+
+
+class Point:
+	def __new__(cls, *args, **kwargs): # базовое определение
+		print('вызов __new__ для ' + str(cls))
+		# запускаем процесс создания экземпляра и возвращаем адрес нового объекта
+		return super().__new__(cls) #из базового класса вызываем __new__
+
+	def __init__(self, x=0, y=0):
+		print('вызов __init__ для ' + str(self))
+		self.x = x
+		self.y = y
+
+pt = Point(1, 2)
+print(pt)
+
+# паттерн Singleton
+# полагаем, что в программе должен существовать только один экземпляр этого класса в каждый момент ее работы.
 class DataBase:
-	__instance = None # ссылка на экземпляр класса
+	__instance = None
 
 	def __new__(cls, *args, **kwargs):
-		if cls.__instance is None:
-			cls.__instance = super().__new__(cls) # присвоим ссылку на экземпляр класса
-		return cls.__instance
+		if cls.__instance == None:
+			cls.__instance = super().__new__(cls)
 
-	def __init__(self, user, psw, port) -> None:
-		self.user = user
-		self.psw = psw
-		self.port = port
+		return cls.__instance
 
 	def __del__(self):
 		DataBase.__instance = None
 
+	def __init__(self, user, psw, port):
+		self.user = user
+		self.psw = psw
+		self.port = port
+
 	def connect(self):
-		print(f"connect with DB: {self.user}, {self.psw}, {self.port}")
+		print(f'соединение с БД: {self.user}, {self.psw}, {self.port}')
 
 	def close(self):
-		print("close connection of DB")
+		print('закрытие соединения с БД')
 
 	def read(self):
-		print("data from DB")
+		return 'данные из БД'
 
-	def write(self, data):
-		print(f"write on DB {data}")
+	def write(data):
+		print(f'запись в БД {data}')
 
-db = DataBase('root', '1234', 80)
-db2 = DataBase('root2', '5678', 40) # не был создан, ссылается на db
-# print(id(db), id(db2))
+db = DataBase('user', '1234', 80)
+db2 = DataBase('user2', '5678', 40) # объект не создан, но перезаписаны данные
+print(id(db), id(db2)) #id объектов одинаковые
 db.connect()
 db2.connect()
+
+pass
